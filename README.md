@@ -17,7 +17,7 @@ The data in data folder looks like this:
 
 #### Matchup Data (Set Counts Over Entire Career)
 
-![](https://raw.githubusercontent.com/nathanesau/MeleeMatchupData/master/screenshots/matchup_table_demo.PNG)
+![](https://raw.githubusercontent.com/nathanesau/MeleeMatchupData/master/screenshots/matchup_table_2018_demo.PNG)
 
 Data was last updated on Oct 6, 2019.
 
