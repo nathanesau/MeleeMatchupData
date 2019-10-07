@@ -44,8 +44,9 @@ def scrapeSSBMRankData():  # output to data/ssbmrank.data
 
 
 def scrapeSetCount(p1name, p2Name):
-    # ensure 1 second delay between queries (avoid getting blocked from API access)
-    time.sleep(1)
+    # ensure 2 second delay between queries (avoid getting blocked from API access)
+    # https://liquipedia.net/api-terms-of-use
+    time.sleep(2)
     baseurl = "https://liquipedia.net/smash/index.php?title=Special%3ARunQuery%2FMatch_history&" + \
         "pfRunQueryFormName=Match%20history&Head_to_head_query[player]=P1Name&Head_to_head_query[opponent]=" + \
         "P2Name&Head_to_head_query[game]=Melee"
@@ -70,8 +71,7 @@ db = Database("data/ssbmrank.db")
 db.LoadSSBMRankData(ssbm_rank_dict)
 
 # example:
-# download matchups for MPGR2019Summer
-playerData = ssbm_rank_dict["MPGR2019Summer"]
+playerData = ssbm_rank_dict["MPGR2018"]
 nplayers = len(playerData)
 matchup_dict = {}
 for i in range(nplayers):
@@ -94,4 +94,4 @@ for i in range(nplayers):
         print("finished (" + str(i) + ", " + str(j) + ")")
 
 db = Database("data/ssbmrank.db")  # reload database
-db.SaveMatchupData(matchup_dict)
+db.SaveMatchupData(matchup_dict, "MPGR2018")

@@ -42,15 +42,15 @@ class Database:
             player = query.value(1)
             tdata.append([rank, player])
 
-    def _createMatchupTable(self):
-        query = QSqlQuery("CREATE TABLE MATCHUP " +
+    def _createMatchupTable(self, tname):
+        query = QSqlQuery("CREATE TABLE " + tname +
                           " (id INTEGER PRIMARY KEY, Player1 TEXT, Player2 TEXT, " +
                           "SetWins INTEGER, SetLosses INTEGER)")
         if not query.isActive():
             qWarning("createMatchupTable - ERROR: " + query.lastError().text())
 
-    def _populateMatchupTable(self, matchup_dict):
-        query = QSqlQuery("INSERT INTO MATCHUP (Player1, Player2, SetWins, SetLosses) " +
+    def _populateMatchupTable(self, tname, matchup_dict):
+        query = QSqlQuery("INSERT INTO " + tname + " (Player1, Player2, SetWins, SetLosses) " +
                           "VALUES(?, ?, ?, ?)")
         QSqlDatabase.database().transaction()
         for key, value in matchup_dict.items():
@@ -67,9 +67,9 @@ class Database:
                          query.lastError().text())
         QSqlDatabase.database().commit()
 
-    def _readMatchupTable(self, matchup_dict):
+    def _readMatchupTable(self, tname, matchup_dict):
         query = QSqlQuery()
-        if not query.exec("SELECT Player1, Player2, SetWins, SetLosses FROM MATCHUP"):
+        if not query.exec("SELECT Player1, Player2, SetWins, SetLosses FROM " + tname):
             qWarning("readMatchupTable - ERROR: " + query.lastError().text())
         while query.next():
             player1 = query.value(0)
@@ -96,9 +96,11 @@ class Database:
             self._readSSBMRankTable(tname, tdata)
             ssbm_rank_dict[tname] = tdata
 
-    def SaveMatchupData(self, matchup_dict):
-        self._createMatchupTable()
-        self._populateMatchupTable(matchup_dict)
+    def SaveMatchupData(self, matchup_dict, rankingName):
+        tname = "MATCHUP" + "_" + rankingName
+        self._createMatchupTable(tname)
+        self._populateMatchupTable(tname, matchup_dict)
 
-    def LoadMatchupData(self, matchup_dict):
-        self._readMatchupTable(matchup_dict)
+    def LoadMatchupData(self, matchup_dict, rankingName):
+        tname = "MATCHUP" + "_" + rankingName
+        self._readMatchupTable(tname, matchup_dict)
